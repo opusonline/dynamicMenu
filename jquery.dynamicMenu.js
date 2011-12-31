@@ -26,12 +26,12 @@
 				var $list = $(this),
 				$sub = $list.children('ul').first();
 				if ( ! $sub.length) return;
-				return $list.mouseenter(_showSubMenu).mouseleave(_timeoutHiding).data('id', id);
+				return $list.mouseenter(_showSubMenu).mouseleave(_timeoutHiding).data({id: id, sub: sub});
 			},
 			_timeoutHiding = function() {
 				var $list = $(this),
-				$sub = $list.children('ul').first(),
 				id = $list.data('id'),
+				$sub = $list.data('sub'),
 				_hideSubMenu = function() {
 					options.hideSubMenu.call($sub);
 				};
@@ -40,21 +40,21 @@
 			_showSubMenu = function() {
 				var $list = $(this),
 				id = $list.data('id'),
-				$sub = $list.children('ul').first(),
-				$parent = $list.parent('ul');
+				$sub = $list.data('sub');
 				options.showSubMenu.call($sub);
 				clearTimeout(timer_list[id]);
-				_hideAllOtherMenuesInThisLevel($parent, id);
+				_hideAllOtherMenuesInThisLevel($list, id);
 			},
-			_hideAllOtherMenuesInThisLevel = function($parent_ul, active_list_id) {
-				var _hideAllExceptMe = function() {
+			_hideAllOtherMenuesInThisLevel = function($active_list, active_list_id) {
+				var _hideAllExceptActive = function() {
 					var $list = $(this),
-					id = $list.data('id');
+					id = $list.data('id'),
+					$sub = $list.data('sub');
 					if (id == active_list_id) return;
-					var $sub = $list.children('ul').first();
 					options.hideSubMenu.call($sub);
+					clearTimeout(timer_list[id]);
 				};
-				$parent_ul.find(list).each(_hideAllExceptMe);
+				$active_list.parent().find(list).each(_hideAllExceptActive);
 			},
 			list = $(this).find('li').filter(_initSubMenu);
 		});
