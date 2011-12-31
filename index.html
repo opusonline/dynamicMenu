@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Menu</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="jquery.dynamicMenu.css" />
+</head>
+
+<body>
+
+<div id="menu">
+	<ul>
+		<li><a href="">Link1</a>
+			<ul>
+				<li><a href="">Link1a</a></li>
+				<li><a href="">Link1b+</a>
+					<ul>
+						<li><a href="">Sub</a></li>
+					</ul>
+				</li>
+				<li><a href="">Link1c</a></li>
+				<li><a href="">Link1d+</a>
+					<ul>
+						<li><a href="">Sub</a></li>
+					</ul>
+				</li>
+				</li>
+			</ul>
+		</li>
+		<li><a href="">Link2</a>
+			<ul>
+				<li><a href="">Link2a+</a>
+					<ul>
+						<li><a href="">Sub+</a>
+							<ul>
+								<li><a href="">Sub</a></li>
+							</ul>
+						</li>
+						<li><a href="">Sub2</a></li>
+					</ul>
+				</li>
+				<li><a href="">Link2b</a></li>
+				<li><a href="">Link2c</a></li>
+				<li><a href="">Link2d</a></li>
+			</ul>
+		</li>
+		<li><a href="">Link3</a>
+			<ul>
+				<li><a href="">Link3a</a></li>
+				<li><a href="">Link3b</a></li>
+				<li><a href="">Link3c</a></li>
+				<li><a href="">Link3d</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="jquery.dynamicMenu.min.js"></script>
+<script>
+$(document).ready(function() {
+	$('#menu').dynamicMenu();
+});
+</script>
+
+</body>
+
+</html>
