@@ -6,12 +6,15 @@
 (function($) {
 	
 	var defaults = {
-		speed: 1000,
+		timeout: 1000,
+		speed: 200,
 		showSubMenu: function() {
-			$(this).addClass('open').prev().addClass('hover');
+			//$(this).addClass('open').prev().addClass('hover');
+			$(this).stop(true, true).slideDown(defaults.speed).prev().addClass('hover');
 		},
 		hideSubMenu: function() {
-			$(this).removeClass('open').prev().removeClass('hover');
+			//$(this).removeClass('open').prev().removeClass('hover');
+			$(this).slideUp(defaults.speed).prev().removeClass('hover');
 		}
 	};
 	
@@ -21,12 +24,28 @@
 		
 		return this.each(function() {
 			
-			var timer_list = [],
+			var $menu = $(this),
+			timer_list = [],
 			_initSubMenu = function(id) {
 				var $list = $(this),
 				$sub = $list.children('ul').first();
 				if ( ! $sub.length) return;
-				return $list.mouseenter(_showSubMenu).mouseleave(_timeoutHiding).data({id: id, sub: sub});
+				var $parents = $list.parentsUntil($menu, 'li');
+				return $list.mouseenter(_showSubMenu).mouseleave(_timeoutHiding).data({id: id, sub: $sub, parents: $parents});
+			},
+			_showSubMenu = function() {
+				var $list = $(this),
+				id = $list.data('id'),
+				$sub = $list.data('sub'),
+				_clearParentsTimer = function() {
+					var id = $(this).data('id');
+					clearTimeout(timer_list[id]);
+				};
+				options.showSubMenu.call($sub);
+				clearTimeout(timer_list[id]);
+				$list.data('parents').each(_clearParentsTimer);
+				_hideAllOtherMenuesInThisLevel($list, id);
+				return false;
 			},
 			_timeoutHiding = function() {
 				var $list = $(this),
@@ -35,15 +54,7 @@
 				_hideSubMenu = function() {
 					options.hideSubMenu.call($sub);
 				};
-				timer_list[id] = window.setTimeout(_hideSubMenu, options.speed);
-			},
-			_showSubMenu = function() {
-				var $list = $(this),
-				id = $list.data('id'),
-				$sub = $list.data('sub');
-				options.showSubMenu.call($sub);
-				clearTimeout(timer_list[id]);
-				_hideAllOtherMenuesInThisLevel($list, id);
+				timer_list[id] = window.setTimeout(_hideSubMenu, options.timeout);
 			},
 			_hideAllOtherMenuesInThisLevel = function($active_list, active_list_id) {
 				var _hideAllExceptActive = function() {
@@ -56,7 +67,7 @@
 				};
 				$active_list.parent().find(list).each(_hideAllExceptActive);
 			},
-			list = $(this).find('li').filter(_initSubMenu);
+			list = $menu.find('li').filter(_initSubMenu);
 		});
 	};
 	
