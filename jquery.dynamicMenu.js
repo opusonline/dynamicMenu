@@ -11,7 +11,7 @@
 		timeout: 1000,
 		showSubMenu: function() {
 			//$(this).addClass('open').prev().addClass('hover');
-			$(this).stop(true, true).slideDown(defaults.speed).prev().addClass('hover');
+			$(this).stop(1,1).slideDown(defaults.speed).prev().addClass('hover');
 			//$(this).stop(true, true).fadeIn(defaults.speed).prev().addClass('hover');
 		},
 		hideSubMenu: function() {
@@ -33,16 +33,16 @@
 			hide_timer_list = [],
 			_initSubMenu = function(id) {
 				var $list = $(this),
-				$sub = $list.children('ul').first();
+				$sub = $list.find('ul').first();
 				if ( ! $sub.length) return;
 				var $parents = $list.parentsUntil($menu, 'li');
 				return $list.mouseenter(_timeoutShow).mouseleave(_timeoutHide).data({id: id, sub: $sub, parents: $parents});
 			},
 			_timeoutShow = function() {
-				var $list = $(this),
-				data = $list.data(),
+				var $list = this,
+				data = $.data($list),
 				_clearParentsTimer = function() {
-					var parent_id = $(this).data('id');
+					var parent_id = $.data(this, 'id');
 					clearTimeout(hide_timer_list[parent_id]);
 				},
 				_showSubMenu = function() {
@@ -55,7 +55,7 @@
 				return false;
 			},
 			_timeoutHide = function() {
-				var data = $(this).data(),
+				var data = $.data(this),
 				_hideSubMenu = function() {
 					options.hideSubMenu.call(data.sub);
 				};
@@ -64,12 +64,12 @@
 			},
 			_hideAllOtherMenuesInThisLevel = function($active_list, active_list_id) {
 				var _hideAllExceptActive = function() {
-					var data = $(this).data();
+					var data = $.data(this);
 					if (data.id == active_list_id) return;
 					options.hideSubMenu.call(data.sub);
 					clearTimeout(hide_timer_list[data.id]);
 				};
-				$active_list.parent().find(list).each(_hideAllExceptActive);
+				$($active_list).parent().find(list).each(_hideAllExceptActive);
 			},
 			list = $menu.find('li').filter(_initSubMenu);
 		});
