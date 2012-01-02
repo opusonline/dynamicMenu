@@ -12,10 +12,12 @@
 		showSubMenu: function() {
 			//$(this).addClass('open').prev().addClass('hover');
 			$(this).stop(true, true).slideDown(defaults.speed).prev().addClass('hover');
+			//$(this).stop(true, true).fadeIn(defaults.speed).prev().addClass('hover');
 		},
 		hideSubMenu: function() {
 			//$(this).removeClass('open').prev().removeClass('hover');
-			$(this).slideUp(defaults.speed).prev().removeClass('hover');
+			//$(this).slideUp(defaults.speed).prev().removeClass('hover');
+			$(this).fadeOut(defaults.speed).prev().removeClass('hover');
 		}
 	},
 	w = window;
